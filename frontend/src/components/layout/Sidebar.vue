@@ -1,0 +1,204 @@
+<template>
+  <!-- 移動設備的遮罩層 -->
+  <transition name="fade">
+    <div v-if="isOpen" @click="$emit('close')" class="modal-backdrop z-40 lg:hidden"></div>
+  </transition>
+
+  <!-- Sidebar -->
+  <aside
+    :class="[
+      'fixed inset-y-0 left-0 z-50 flex w-64 flex-col border-r border-slate-200 bg-white',
+      'dark:border-slate-700 dark:bg-slate-800',
+      'transition-transform duration-300 ease-in-out',
+      'lg:translate-x-0',
+      isOpen ? 'translate-x-0' : '-translate-x-full',
+    ]"
+  >
+    <!-- 系統 Logo -->
+    <div class="flex items-center gap-3 p-6">
+      <Leaf :size="28" class="text-emerald-600 dark:text-emerald-400" />
+      <h1 class="text-xl font-bold text-slate-900 dark:text-white">AgriMind</h1>
+    </div>
+
+    <!-- 導航選單 -->
+    <nav id="sidebar-nav" class="flex-1 p-4 py-0">
+      <ul class="space-y-2">
+        <li>
+          <router-link
+            id="nav-home"
+            to="/home"
+            @click="$emit('close')"
+            class="flex cursor-pointer items-center gap-3 rounded p-3 text-slate-700 transition
+              hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300
+              dark:hover:bg-emerald-900/30 dark:hover:text-emerald-400"
+            active-class="bg-emerald-50 text-emerald-700 font-medium dark:bg-emerald-900/30 dark:text-emerald-400"
+          >
+            <Home :size="20" />
+            <span>首頁</span>
+          </router-link>
+        </li>
+
+        <li>
+          <router-link
+            id="nav-farms"
+            to="/farms"
+            @click="$emit('close')"
+            class="flex cursor-pointer items-center gap-3 rounded p-3 text-slate-700 transition
+              hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300
+              dark:hover:bg-emerald-900/30 dark:hover:text-emerald-400"
+            active-class="bg-emerald-50 text-emerald-700 font-medium dark:bg-emerald-900/30 dark:text-emerald-400"
+          >
+            <Tractor :size="20" />
+            <span>農場管理</span>
+          </router-link>
+        </li>
+
+        <li>
+          <router-link
+            to="/knowledge"
+            @click="$emit('close')"
+            class="flex cursor-pointer items-center gap-3 rounded p-3 text-slate-700 transition
+              hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300
+              dark:hover:bg-emerald-900/30 dark:hover:text-emerald-400"
+            active-class="bg-emerald-50 text-emerald-700 font-medium dark:bg-emerald-900/30 dark:text-emerald-400"
+          >
+            <BookOpen :size="20" />
+            <span>知識庫</span>
+          </router-link>
+        </li>
+
+        <li>
+          <router-link
+            id="nav-image-records"
+            to="/image-records"
+            @click="$emit('close')"
+            class="flex cursor-pointer items-center gap-3 rounded p-3 text-slate-700 transition
+              hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300
+              dark:hover:bg-emerald-900/30 dark:hover:text-emerald-400"
+            active-class="bg-emerald-50 text-emerald-700 font-medium dark:bg-emerald-900/30 dark:text-emerald-400"
+          >
+            <Camera :size="20" />
+            <span>影像紀錄</span>
+          </router-link>
+        </li>
+
+        <li v-if="isAdmin">
+          <router-link
+            to="/chat-logs"
+            @click="$emit('close')"
+            class="flex cursor-pointer items-center gap-3 rounded p-3 text-slate-700 transition
+              hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300
+              dark:hover:bg-emerald-900/30 dark:hover:text-emerald-400"
+            active-class="bg-emerald-50 text-emerald-700 font-medium dark:bg-emerald-900/30 dark:text-emerald-400"
+          >
+            <MessageSquareText :size="20" />
+            <span>對話紀錄</span>
+          </router-link>
+        </li>
+
+        <li v-if="isAdmin">
+          <router-link
+            to="/user-management"
+            @click="$emit('close')"
+            class="flex cursor-pointer items-center gap-3 rounded p-3 text-slate-700 transition
+              hover:bg-emerald-50 hover:text-emerald-700 dark:text-slate-300
+              dark:hover:bg-emerald-900/30 dark:hover:text-emerald-400"
+            active-class="bg-emerald-50 text-emerald-700 font-medium dark:bg-emerald-900/30 dark:text-emerald-400"
+          >
+            <Users :size="20" />
+            <span>帳號管理</span>
+          </router-link>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- 用戶資訊和登出 -->
+    <div class="p-4">
+      <!-- 主題切換 -->
+      <div class="mb-3 flex justify-start">
+        <button
+          @click="toggleTheme"
+          class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-slate-50
+            text-slate-500 transition hover:bg-slate-200 dark:bg-slate-700/50 dark:text-slate-400
+            dark:hover:bg-slate-600"
+        >
+          <component :is="themeIcon" :size="16" />
+        </button>
+      </div>
+      <div class="mb-3 flex items-center gap-3 rounded bg-slate-50 p-2 dark:bg-slate-700/50">
+        <div
+          class="flex h-10 w-10 items-center justify-center rounded-full bg-emerald-600
+            dark:bg-emerald-500"
+        >
+          <span class="text-base font-medium text-white">
+            {{ user?.username?.charAt(0).toUpperCase() || '?' }}
+          </span>
+        </div>
+        <div class="min-w-0 flex-1">
+          <div class="truncate text-base font-medium text-slate-900 dark:text-white">
+            {{ user?.username || '訪客' }}
+          </div>
+          <div v-if="isAdmin" class="text-sm text-emerald-600 dark:text-emerald-400">管理員</div>
+          <div v-else class="text-sm text-slate-500 dark:text-slate-400">一般使用者</div>
+        </div>
+      </div>
+      <button
+        @click="handleLogout"
+        class="flex w-full cursor-pointer items-center justify-center gap-2 rounded bg-slate-100 p-2
+          text-base text-slate-700 transition hover:bg-slate-200 dark:bg-slate-700 dark:text-slate-300
+          dark:hover:bg-slate-600"
+      >
+        <LogOut :size="16" />
+        <span>登出</span>
+      </button>
+    </div>
+  </aside>
+</template>
+
+<script setup>
+import { computed } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import { useRouter } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { Home, Tractor, LogOut, Leaf, Sun, Moon, Laptop, BookOpen, Camera, MessageSquareText, Users } from 'lucide-vue-next'
+import { useTheme } from '@/composables/useTheme'
+
+defineProps({
+  isOpen: {
+    type: Boolean,
+    default: false,
+  },
+})
+
+defineEmits(['close'])
+
+const authStore = useAuthStore()
+const router = useRouter()
+const { user, isAdmin } = storeToRefs(authStore)
+const { theme, toggleTheme } = useTheme()
+
+// 計算顯示的主題圖示與文字
+const themeIcon = computed(() => {
+  if (theme.value === 'light') return Sun
+  if (theme.value === 'dark') return Moon
+  return Laptop
+})
+
+
+function handleLogout() {
+  authStore.logout()
+  router.push('/login')
+}
+</script>
+
+<style scoped>
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.3s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+</style>
