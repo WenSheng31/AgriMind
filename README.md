@@ -58,11 +58,24 @@
 # 安裝 Homebrew（如尚未安裝）
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
-# 安裝 PostgreSQL 18、pgvector、uv、Node.js
-brew install postgresql@18 pgvector uv node
+# 安裝 PostgreSQL 18、uv、Node.js
+brew install postgresql@18 uv node
 
 # 啟動 PostgreSQL 服務
 brew services start postgresql@18
+```
+
+**pgvector**：從源碼編譯安裝（官方推薦方式）：
+
+> 版本號請至 [github.com/pgvector/pgvector](https://github.com/pgvector/pgvector) 確認最新版本再執行
+
+```bash
+export PG_CONFIG=/opt/homebrew/opt/postgresql@18/bin/pg_config
+cd /tmp
+git clone --branch v0.8.4 https://github.com/pgvector/pgvector.git
+cd pgvector
+make
+sudo --preserve-env=PG_CONFIG make install
 ```
 
 </details>
