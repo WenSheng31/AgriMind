@@ -2,8 +2,8 @@ import { ref, computed, watch } from 'vue'
 import { useRouter } from 'vue-router'
 import api from '@/services/api'
 
-const SESSION_DECIDED_KEY = 'argimind-task-decided'
-const SESSION_ACTIVE_KEY = 'argimind-task-active'
+const SESSION_DECIDED_KEY = 'agrimind-task-decided'
+const SESSION_ACTIVE_KEY = 'agrimind-task-active'
 
 export const QUESTIONNAIRE_URL = 'https://forms.gle/mmJdpt1RCdgiAZKS8'
 export const TOTAL_TASKS = 8

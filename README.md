@@ -128,8 +128,8 @@ source ~/.zshrc
 Homebrew PostgreSQL 的預設超級使用者是目前的系統帳號（不是 `postgres`），請使用以下指令建立資料庫：
 
 ```bash
-createdb argimind
-psql argimind -c "CREATE EXTENSION IF NOT EXISTS vector;"
+createdb agrimind
+psql agrimind -c "CREATE EXTENSION IF NOT EXISTS vector;"
 ```
 
 </details>
@@ -141,8 +141,8 @@ psql argimind -c "CREATE EXTENSION IF NOT EXISTS vector;"
 # 若 psql 不在 PATH，請先切換目錄：
 # cd "C:\Program Files\PostgreSQL\18\bin"
 
-psql -U postgres -c "CREATE DATABASE argimind;"
-psql -U postgres -d argimind -c "CREATE EXTENSION IF NOT EXISTS vector;"
+psql -U postgres -c "CREATE DATABASE agrimind;"
+psql -U postgres -d agrimind -c "CREATE EXTENSION IF NOT EXISTS vector;"
 ```
 
 </details>
@@ -186,6 +186,9 @@ cd AgriMind
 ```bash
 cd backend
 
+# 建立虛擬環境
+uv venv
+
 # 安裝依賴（PyTorch 指定 CPU 版本，避免拉取 GPU 版）
 uv pip install torch --index-url https://download.pytorch.org/whl/cpu
 uv pip install -r requirements.txt
@@ -196,9 +199,11 @@ cp .env.example .env
 # Copy-Item .env.example .env
 # 以文字編輯器開啟 .env，填入各項 API 金鑰
 
-# 啟動服務（自動建立資料表）
+# 啟動服務（自動建立資料表，並在資料庫為空時自動匯入示範資料）
 uv run run.py
 ```
+
+> 首次啟動時，若資料庫是全新的（`farms` 表無資料），系統會自動匯入 `backend/db/seed_data.sql` 中的示範農場、感測器數據、農事紀錄與知識庫資料，方便直接體驗完整功能。此檔案不含任何使用者帳號資料，帳號一律透過 Google OAuth 登入自動建立。
 
 後端預設執行於 `http://localhost:8000`，互動式 API 文件：`http://localhost:8000/docs`
 
@@ -228,7 +233,7 @@ npm run dev
 
 | 變數名稱 | 說明 | 範例 |
 |----------|------|------|
-| `DATABASE_URL` | PostgreSQL 連線字串 | `postgresql://user:pass@localhost:5432/argimind` |
+| `DATABASE_URL` | PostgreSQL 連線字串 | `postgresql://user:pass@localhost:5432/agrimind` |
 | `SECRET_KEY` | JWT 簽名金鑰（請使用隨機字串，可執行 `openssl rand -hex 32` 產生） | `your_secret_key` |
 | `ALGORITHM` | JWT 演算法 | `HS256` |
 | `ACCESS_TOKEN_EXPIRE_MINUTES` | Token 有效期（分鐘） | `30` |

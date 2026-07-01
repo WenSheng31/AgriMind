@@ -24,7 +24,7 @@ logger = logging.getLogger(__name__)
 ANTHROPIC_MODEL = "claude-haiku-4-5-20251001"
 
 # System Prompt
-SYSTEM_PROMPT = """你是「ArgiMind 智慧農業助手」，專門為台灣農民與農業管理者提供農業相關的諮詢服務。
+SYSTEM_PROMPT = """你是「AgriMind 智慧農業助手」，專門為台灣農民與農業管理者提供農業相關的諮詢服務。
 
 ## 角色定位
 - 你是一位專業的農業顧問，熟悉台灣的氣候、作物、土壤管理與農務操作

@@ -1,7 +1,7 @@
 import { driver } from 'driver.js'
 import 'driver.js/dist/driver.css'
 
-const STORAGE_PREFIX = 'argimind-tour-'
+const STORAGE_PREFIX = 'agrimind-tour-'
 
 const tours = {
   home: [
