@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
     BACKEND_CORS_ORIGINS: str = '["http://localhost:5173"]'
-    ANTHROPIC_API_KEY: str = "",
+    ANTHROPIC_API_KEY: str = ""
     CWA_API_KEY: str = ""
     UPLOAD_DIR: str = "./uploads"
     MCP_POOL_SIZE: int = 10
